@@ -9,6 +9,8 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenState extends State<LoginScreen> {
   final formKey = GlobalKey<FormState>();
+  String email = '';
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
@@ -44,24 +46,30 @@ class LoginScreenState extends State<LoginScreen> {
         }
         return error;
       },
+      onSaved: (String value) {
+        email = value;
+      },
     );
   }
 
   Widget passwordField() {
     return TextFormField(
-        decoration:
-            InputDecoration(labelText: 'Password', hintText: 'Password'),
-        obscureText: true, // more like secureTextEntry in RN
-        validator: (String value) {
-          var error;
-          error = null;
-          if (!value.contains('@')) {
-            error = 'Please enter a valid password';
-          } else if (value.length < 4) {
-            error = 'Password length cannot be less than 4 chars';
-          }
-          return error;
-        });
+      decoration: InputDecoration(labelText: 'Password', hintText: 'Password'),
+      obscureText: true, // more like secureTextEntry in RN
+      validator: (String value) {
+        var error;
+        error = null;
+        if (!value.contains('@')) {
+          error = 'Please enter a valid password';
+        } else if (value.length < 4) {
+          error = 'Password length cannot be less than 4 chars';
+        }
+        return error;
+      },
+      onSaved: (String value) {
+        password = value;
+      },
+    );
   }
 
   Widget submitButton() {
@@ -72,7 +80,10 @@ class LoginScreenState extends State<LoginScreen> {
         ),
         color: Colors.blueAccent,
         onPressed: () {
-          formKey.currentState.validate();
+          if (formKey.currentState.validate()) {
+            formKey.currentState.save();
+
+          }
         });
   }
 }
